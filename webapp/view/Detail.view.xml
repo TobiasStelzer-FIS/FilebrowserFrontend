@@ -1,0 +1,56 @@
+<mvc:View controllerName="de.fis.filebrowser.controller.Detail" xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core"
+	xmlns:semantic="sap.m.semantic">
+	<semantic:DetailPage id="page" navButtonPress="onNavBack" showNavButton="{device>/system/phone}" title="{i18n>detailTitle}"
+		busy="{detailView>/busy}" busyIndicatorDelay="{detailView>/delay}">
+		<semantic:content>
+			<Table id="folderContentTable" width="auto" items="{path: 'folderContent>/SelectedFolder/Children'}" updateFinished="onTableUpdateFinished"
+				noDataText="{i18n>detailFolderContentTableNoDataText}" busyIndicatorDelay="{detailView>/lineItemTableDelay}" class="sapUiResponsiveMargin">
+				<headerToolbar>
+					<Toolbar id="lineItemsToolbar">
+						<Breadcrumbs links="{path: 'folderContent>/SelectedFolder/Parents'}" currentLocationText="{folderContent>/SelectedFolder/Name}">
+							<Link text="{folderContent>Name}"/>
+						</Breadcrumbs>
+						<!--<Title id="lineItemsHeader" text="{detailView>/lineItemListTitle}"/>-->
+					</Toolbar>
+				</headerToolbar>
+				<columns>
+					<Column width="15px"></Column>
+					<Column>
+						<Text text="{i18n>detailFolderContentTableIDColumn}"/>
+					</Column>
+					<Column>
+						<Text text="{i18n>detailFolderContentTableFiletypeColumn}"/>
+					</Column>
+					<Column>
+						<Text text="{i18n>detailFolderContentTableLastModificationColumn}"/>
+					</Column>
+					<Column>
+						<Text text="{i18n>detailFolderContentTableFilesizeColumn}"/>
+					</Column>
+					<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Right">
+						<Text text="{i18n>detailFolderContentTableUnitNumberColumn}"/>
+					</Column>
+					<Column></Column>
+				</columns>
+				<items>
+					<ColumnListItem>
+						<cells>
+							<core:Icon src="sap-icon://folder-blank" decorative="true"/>
+							<ObjectIdentifier title="{folderContent>Name}" text="{ApplicationId}"/>
+							<Text text="{folderContent>Type}"/>
+							<Text text="{folderContent>Filesize}"/>
+							<Text text="test2"/>
+							<Toolbar design="Transparent">
+								<Button icon="sap-icon://download"/>
+								<Button icon="sap-icon://delete"/>
+							</Toolbar>
+						</cells>
+					</ColumnListItem>
+				</items>
+			</Table>
+		</semantic:content>
+		<semantic:sendEmailAction>
+			<semantic:SendEmailAction id="shareEmail" press="onShareEmailPress"/>
+		</semantic:sendEmailAction>
+	</semantic:DetailPage>
+</mvc:View>
