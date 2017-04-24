@@ -18,7 +18,8 @@
 							showRefreshButton="{= !${device>/support/touch} }"
 							tooltip="{i18n>masterSearchTooltip}"
 							width="100%"
-							search="onSearch">
+							search="onSearch"
+							liveChange="onSearch">
 					</SearchField>
 				</contentMiddle>
 			</Bar>
@@ -37,6 +38,7 @@
 	       		mode="SingleSelectMaster"
 				includeItemInSelection="true"
 				busyIndicatorDelay="{masterView>/delay}"
+				busy="{masterView>/busy}"
 				selectionChange="onSelectionChange"
 				updateFinished="onUpdateFinished">
 				<headerToolbar>

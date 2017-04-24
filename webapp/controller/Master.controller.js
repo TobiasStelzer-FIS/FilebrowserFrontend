@@ -25,14 +25,15 @@ sap.ui.define([
 			onInit : function () {
 				// Control state model
 				var oTree = this.byId("Tree"),
-					oViewModel = this._createViewModel(),
-					hierarchyModel = this.getModel("hierarchyModel");
-				
-				oTree.setBusy(true);
+					hierarchyModel = this.getModel("hierarchyModel"),
+					oViewModel = this.getModel("masterView");
+
+				this._initViewModel();
+				oViewModel.setProperty("/busy", true);
 				
 				hierarchyModel.attachEventOnce("requestCompleted", function () {
 					oTree.expandToLevel(1);
-					oTree.setBusy(false);
+					oViewModel.setProperty("/busy", false);
 					var oItem = oTree.getItems()[0];
 					oTree.setSelectedItem(oItem, true, true);
 					var oBinding = oTree.getBinding("items");
@@ -43,21 +44,13 @@ sap.ui.define([
 
 //				this._oList = oList;
 				// keeps the filter and search state
-//				this._oListFilterState = {
-//					aFilter : [],
-//					aSearch : []
-//				};
+				this._oListFilterState = {
+					aSearch : []
+				};
 
-				this.setModel(oViewModel, "masterView");
 				// Make sure, busy indication is showing immediately so there is no
 				// break after the busy indication for loading the view's meta data is
 				// ended (see promise 'oWhenMetadataIsLoaded' in AppController)
-
-//				this.getView().addEventDelegate({
-//					onBeforeFirstShow: function () {
-//						this.getOwnerComponent().oListSelector.setBoundMasterList(oList);
-//					}.bind(this)
-//				});
 
 				this.getRouter().getRoute("master").attachPatternMatched(this._onMasterMatched, this);
 				this.getRouter().attachBypassed(this.onBypassed, this);
@@ -75,12 +68,9 @@ sap.ui.define([
 			 * @public
 			 */
 			onUpdateFinished : function (oEvent) {
-				//console.log("asbcljlekwf");
-				// update the master list object counter after new data is loaded
-			//	this._updateListItemCount(oEvent.getParameter("total"));
 				// hide pull to refresh if necessary
 				this.byId("pullToRefresh").hide();
-				this.byId("Tree").setBusy(false);
+				this.getModel("masterView").setProperty("/busy", false);
 			},
 
 			/**
@@ -92,8 +82,6 @@ sap.ui.define([
 			 * @public
 			 */
 			onSearch : function (oEvent) {
-				var oTree = this.getView().byId("Tree");
-				oTree.expandToLevel(1);
 				if (oEvent.getParameters().refreshButtonPressed) {
 					// Search field's 'refresh' button has been pressed.
 					// This is visible if you select any master list item.
@@ -103,15 +91,17 @@ sap.ui.define([
 					return;
 				}
 
-				var sQuery = oEvent.getParameter("query");
-
+				var sQuery = oEvent.getParameter("newValue");	// Bei liveChange-event des Searchfields
+				if (sQuery == null) {
+					sQuery = oEvent.getParameter("query");		// Bei search-event des Searchfields
+				}
+				
 				if (sQuery) {
-					this._oListFilterState.aSearch = [new Filter("Lastname", FilterOperator.Contains, sQuery)];
+					this._oListFilterState.aSearch = [new Filter("Name", FilterOperator.Contains, sQuery)];
 				} else {
 					this._oListFilterState.aSearch = [];
 				}
 				this._applyFilterSearch();
-
 			},
 
 			/**
@@ -122,11 +112,8 @@ sap.ui.define([
 			onRefresh : function () {
 				var oTree = this.getView().byId("Tree");
 				this.getModel("hierarchyModel").loadData("/backend/filebrowser?action=hierarchy");
-				oTree.setBusy(true);
-				//this._oList.getBinding("items").refresh();
+				this.getModel("masterView").setProperty("/busy", true);
 			},
-
-
 
 			/**
 			 * Event handler for the list selection event
@@ -144,22 +131,7 @@ sap.ui.define([
 			 * @public
 			 */
 			onBypassed : function () {
-//				this._oList.removeSelections(true);
-			},
-
-			/**
-			 * Used to create GroupHeaders with non-capitalized caption.
-			 * These headers are inserted into the master list to
-			 * group the master list's items.
-			 * @param {Object} oGroup group whose text is to be displayed
-			 * @public
-			 * @returns {sap.m.GroupHeaderListItem} group header with non-capitalized caption.
-			 */
-			createGroupHeader : function (oGroup) {
-				return new GroupHeaderListItem({
-					title : oGroup.text,
-					upperCase : false
-				});
+				this.getView().byId("Tree").removeSelections(true);
 			},
 
 			/**
@@ -175,17 +147,11 @@ sap.ui.define([
 			/* begin: internal methods                                     */
 			/* =========================================================== */
 
-
-			_createViewModel : function() {
-				return new JSONModel({
-					isFilterBarVisible: false,
-					filterBarLabel: "",
-					delay: 0,
-					title: this.getResourceBundle().getText("masterTitleCount", [0]),
-					noDataText: this.getResourceBundle().getText("masterListNoDataText"),
-					sortBy: "Lastname",
-					groupBy: "None"
-				});
+			_initViewModel: function () {
+				var oModel = this.getModel("masterView");
+				
+				oModel.setProperty("title", this.getResourceBundle().getText("masterTitleCount", [0]));
+				oModel.setProperty("noDataText", this.getResourceBundle().getText("masterListNoDataText"));
 			},
 
 			/**
@@ -226,27 +192,16 @@ sap.ui.define([
 			},
 
 			/**
-			 * Sets the item count on the master list header
-			 * @param {integer} iTotalItems the total number of items in the list
-			 * @private
-			 */
-			_updateListItemCount : function (iTotalItems) {
-				var sTitle;
-				// only update the counter if the length is final
-				if (this._oList.getBinding("items").isLengthFinal()) {
-					sTitle = this.getResourceBundle().getText("masterTitleCount", [iTotalItems]);
-					this.getModel("masterView").setProperty("/title", sTitle);
-				}
-			},
-
-			/**
 			 * Internal helper method to apply both filter and search state together on the list binding
 			 * @private
 			 */
 			_applyFilterSearch : function () {
 				var aFilters = this._oListFilterState.aSearch.concat(this._oListFilterState.aFilter),
 					oViewModel = this.getModel("masterView");
-//				this._oList.getBinding("items").filter(aFilters, "Application");
+				var oTree = this.getView().byId("Tree");
+				
+				oTree.getBinding("items").filter(aFilters, "Application");
+				
 				// changes the noDataText of the list in case there are no filter results
 				if (aFilters.length !== 0) {
 					oViewModel.setProperty("/noDataText", this.getResourceBundle().getText("masterListNoDataWithFilterOrSearchText"));
@@ -254,26 +209,6 @@ sap.ui.define([
 					// only reset the no data text to default when no new search was triggered
 					oViewModel.setProperty("/noDataText", this.getResourceBundle().getText("masterListNoDataText"));
 				}
-			},
-
-			/**
-			 * Internal helper method to apply both group and sort state together on the list binding
-			 * @param {sap.ui.model.Sorter[]} aSorters an array of sorters
-			 * @private
-			 */
-			_applyGroupSort : function (aSorters) {
-//				this._oList.getBinding("items").sort(aSorters);
-			},
-
-			/**
-			 * Internal helper method that sets the filter bar visibility property and the label's caption to be shown
-			 * @param {string} sFilterBarText the selected filter value
-			 * @private
-			 */
-			_updateFilterBar : function (sFilterBarText) {
-				var oViewModel = this.getModel("masterView");
-				oViewModel.setProperty("/isFilterBarVisible", (this._oListFilterState.aFilter.length > 0));
-				oViewModel.setProperty("/filterBarLabel", this.getResourceBundle().getText("masterFilterBarText", [sFilterBarText]));
 			}
 
 		});

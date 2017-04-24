@@ -35,11 +35,7 @@
 			"tablet": true,
 			"phone": true
 		},
-		"supportedThemes": [
-			"sap_hcb",
-			"sap_bluecrystal",
-			"sap_belize"
-		]
+		"supportedThemes": ["sap_hcb", "sap_bluecrystal", "sap_belize"]
 	},
 	"sap.ui5": {
 		"_version": "1.2.0",
@@ -86,24 +82,15 @@
 				},
 				"async": true
 			},
-			"routes": [
-				{
-					"pattern": "",
-					"name": "master",
-					"target": [
-						"object",
-						"master"
-					]
-				},
-				{
-					"pattern": "Folder/{objectId}",
-					"name": "object",
-					"target": [
-						"master",
-						"object"
-					]
-				}
-			],
+			"routes": [{
+				"pattern": "",
+				"name": "master",
+				"target": ["object", "master"]
+			}, {
+				"pattern": "Folder/{objectId}",
+				"name": "object",
+				"target": ["master", "object"]
+			}],
 			"targets": {
 				"master": {
 					"viewName": "Master",
@@ -129,6 +116,12 @@
 					"viewId": "notFound"
 				}
 			}
+		},
+		"resources": {
+			"css": [{
+				"uri": "css/style.css",
+				"id": ""
+			}]
 		}
 	}
 }

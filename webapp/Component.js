@@ -27,6 +27,9 @@ sap.ui.define([
 				// set the device model
 				this.setModel(models.createDeviceModel(), "device");
 
+				this.setModel(models.createMasterViewModel(), "masterView");
+				this.setModel(models.createDetailViewModel(), "detailView");
+				
 				this.setModel(new JSONModel(), "hierarchyModel");
 				this.setModel(new JSONModel(), "contentModel");
 				

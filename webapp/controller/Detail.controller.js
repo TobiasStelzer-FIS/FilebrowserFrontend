@@ -108,6 +108,12 @@ sap.ui.define([
 			/* =========================================================== */
 			/* begin: internal methods                                     */
 			/* =========================================================== */
+			
+			_initViewModel: function () {
+				var oModel = this.getModel("detailView");	
+				
+				oModel.setProperty("lineItemListTitle", this.getResourceBundle().getText("detailFolderContentTableHeading"));
+			},
 
 			_loadFolder : function (sId) {
 				this.getModel("contentModel").loadData("/backend/filebrowser?action=navigate&id=" + sId);

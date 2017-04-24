@@ -28,7 +28,7 @@
 					<Column>
 						<Text text="{i18n>detailFolderContentTableFilesizeColumn}"/>
 					</Column>
-					<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Right">
+					<Column hAlign="Right">
 						<Text text="{i18n>detailFolderContentTableUnitNumberColumn}"/>
 					</Column>
 					<Column></Column>
@@ -41,9 +41,9 @@
 							<Text text="{contentModel>Type}"/>
 							<Text text="{contentModel>Filesize}"/>
 							<Text text="test2"/>
-							<Toolbar design="Transparent">
-								<Button icon="sap-icon://delete" press="onDeletePressed"/>
-							</Toolbar>
+							<HBox>
+								<Button class="transparentButton" icon="sap-icon://delete" press="onDeletePressed"/>
+							</HBox>
 						</cells>
 					</ColumnListItem>
 				</items>
