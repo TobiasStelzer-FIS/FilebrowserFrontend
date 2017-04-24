@@ -35,15 +35,11 @@
 			"tablet": true,
 			"phone": true
 		},
-<<<<<<< Upstream, based on 593767ec33ee7437c36d7bee797bb302abda15a5
 		"supportedThemes": [
 			"sap_hcb",
 			"sap_bluecrystal",
 			"sap_belize"
 		]
-=======
-		"supportedThemes": ["sap_hcb", "sap_bluecrystal", "sap_belize"]
->>>>>>> 7d5cddd Implemented deleting functionality 
 	},
 	"sap.ui5": {
 		"_version": "1.2.0",
@@ -90,7 +86,6 @@
 				},
 				"async": true
 			},
-<<<<<<< Upstream, based on 593767ec33ee7437c36d7bee797bb302abda15a5
 			"routes": [
 				{
 					"pattern": "",
@@ -109,18 +104,6 @@
 					]
 				}
 			],
-=======
-			"routes": [{
-				"pattern": "",
-				"name": "master",
-				"target": ["object", "master"],
-				"greedy": false
-			}, {
-				"pattern": "Folder/{objectId}",
-				"name": "object",
-				"target": ["master", "object"]
-			}],
->>>>>>> 7d5cddd Implemented deleting functionality 
 			"targets": {
 				"master": {
 					"viewName": "Master",

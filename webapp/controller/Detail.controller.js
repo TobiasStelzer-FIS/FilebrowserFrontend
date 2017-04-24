@@ -149,12 +149,7 @@ sap.ui.define([
 			 */
 			_onObjectMatched : function (oEvent) {
 				var sObjectId =  oEvent.getParameter("arguments").objectId;
-<<<<<<< Upstream, based on 593767ec33ee7437c36d7bee797bb302abda15a5
-				this.getModel("contentModel").loadData("/backend/filebrowser?action=navigate&id=" + sObjectId);
-				this.getModel("detailView").setProperty("/busy", true);
-=======
 				this._loadFolder(sObjectId);
->>>>>>> 7d5cddd Implemented deleting functionality 
 				
 //				this.getModel().metadataLoaded().then( function() {
 //					var sObjectPath = this.getModel().createKey("Applicants", {
