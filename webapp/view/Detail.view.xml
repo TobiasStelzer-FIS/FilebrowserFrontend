@@ -3,12 +3,12 @@
 	<semantic:DetailPage id="page" navButtonPress="onNavBack" showNavButton="{device>/system/phone}" title="{i18n>detailTitle}"
 		busy="{detailView>/busy}" busyIndicatorDelay="{detailView>/delay}">
 		<semantic:content>
-			<Table id="folderContentTable" width="auto" items="{path: 'folderContent>/SelectedFolder/Children'}" updateFinished="onTableUpdateFinished"
+			<Table id="folderContentTable" width="auto" items="{path: 'contentModel>/SelectedFolder/Children'}" updateFinished="onTableUpdateFinished"
 				noDataText="{i18n>detailFolderContentTableNoDataText}" busyIndicatorDelay="{detailView>/lineItemTableDelay}" class="sapUiResponsiveMargin">
 				<headerToolbar>
 					<Toolbar id="lineItemsToolbar">
-						<Breadcrumbs links="{path: 'folderContent>/SelectedFolder/Parents'}" currentLocationText="{folderContent>/SelectedFolder/Name}">
-							<Link text="{folderContent>Name}"/>
+						<Breadcrumbs links="{path: 'contentModel>/SelectedFolder/Parents'}" currentLocationText="{contentModel>/SelectedFolder/Name}">
+							<Link text="{contentModel>Name}" press="onBreadcrumbPress"/>
 						</Breadcrumbs>
 						<!--<Title id="lineItemsHeader" text="{detailView>/lineItemListTitle}"/>-->
 					</Toolbar>
@@ -36,9 +36,9 @@
 					<ColumnListItem>
 						<cells>
 							<core:Icon src="sap-icon://folder-blank" decorative="true"/>
-							<ObjectIdentifier title="{folderContent>Name}" text="{ApplicationId}"/>
-							<Text text="{folderContent>Type}"/>
-							<Text text="{folderContent>Filesize}"/>
+							<ObjectIdentifier title="{contentModel>Name}" text="{ApplicationId}"/>
+							<Text text="{contentModel>Type}"/>
+							<Text text="{contentModel>Filesize}"/>
 							<Text text="test2"/>
 							<Toolbar design="Transparent">
 								<Button icon="sap-icon://download"/>
@@ -49,8 +49,8 @@
 				</items>
 			</Table>
 		</semantic:content>
-		<semantic:sendEmailAction>
-			<semantic:SendEmailAction id="shareEmail" press="onShareEmailPress"/>
-		</semantic:sendEmailAction>
+		<semantic:addAction>
+			<semantic:AddAction id="createFolder" press="onCreateFolder"/>
+		</semantic:addAction>
 	</semantic:DetailPage>
 </mvc:View>

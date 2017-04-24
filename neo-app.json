@@ -41,7 +41,7 @@
       "description": "SAPUI5 Test Resources"
     },
     {
-      "path": "/applman",
+      "path": "/backend",
       "target": {
         "type": "destination",
         "name": "ApplmanSrv"

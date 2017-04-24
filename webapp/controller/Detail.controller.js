@@ -24,6 +24,9 @@ sap.ui.define([
 					lineItemListTitle : this.getResourceBundle().getText("detailFolderContentTableHeading")
 				});
 
+				this.getModel("contentModel").attachEvent("requestCompleted", function() {
+					oViewModel.setProperty("/busy", false);
+				}, this);
 				this.getRouter().getRoute("object").attachPatternMatched(this._onObjectMatched, this);
 
 				this.setModel(oViewModel, "detailView");
@@ -34,21 +37,6 @@ sap.ui.define([
 			/* =========================================================== */
 			/* event handlers                                              */
 			/* =========================================================== */
-
-			/**
-			 * Event handler when the share by E-Mail button has been clicked
-			 * @public
-			 */
-			onShareEmailPress : function () {
-				var oViewModel = this.getModel("detailView");
-
-				sap.m.URLHelper.triggerEmail(
-					null,
-					oViewModel.getProperty("/shareSendEmailSubject"),
-					oViewModel.getProperty("/shareSendEmailMessage")
-				);
-			},
-
 
 			/**
 			 * Updates the item count within the line item table's header
@@ -71,6 +59,20 @@ sap.ui.define([
 					oViewModel.setProperty("/lineItemListTitle", sTitle);
 				}
 			},
+			
+			/**
+			 * Navigates to selected folder
+			 * @param {object} oEvent an event containing the source of the press-event
+			 * @private
+			 */
+			onBreadcrumbPress : function (oEvent) {
+				var oSource = oEvent.getSource();
+				var oBindingContext = oSource.getBindingContext("contentModel");
+				var sObjectId = oBindingContext.getProperty("Id");
+				
+				this.getModel("contentModel").loadData("/backend/filebrowser?action=navigate&id=" + sObjectId);
+				this.getModel("detailView").setProperty("/busy", true);
+			},
 
 			/* =========================================================== */
 			/* begin: internal methods                                     */
@@ -84,7 +86,9 @@ sap.ui.define([
 			 */
 			_onObjectMatched : function (oEvent) {
 				var sObjectId =  oEvent.getParameter("arguments").objectId;
-				this.getModel("folderContent").loadData("/applman/filebrowser?action=navigate&id=" + sObjectId);
+				this.getModel("contentModel").loadData("/backend/filebrowser?action=navigate&id=" + sObjectId);
+				this.getModel("detailView").setProperty("/busy", true);
+				
 //				this.getModel().metadataLoaded().then( function() {
 //					var sObjectPath = this.getModel().createKey("Applicants", {
 //						ApplicantId :  sObjectId

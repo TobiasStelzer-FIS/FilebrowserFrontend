@@ -33,9 +33,10 @@
 			
 			<Tree
 	       		id="Tree"
-	       		items="{path: 'hierarchy>/Hierarchy'}"
+	       		items="{path: 'hierarchyModel>/Hierarchy'}"
 	       		mode="SingleSelectMaster"
 				includeItemInSelection="true"
+				busyIndicatorDelay="{masterView>/delay}"
 				selectionChange="onSelectionChange"
 				updateFinished="onUpdateFinished">
 				<headerToolbar>
@@ -60,7 +61,7 @@
 				-->
 			</headerToolbar>
 	       		<StandardTreeItem
-				title="{hierarchy>Name}"
+				title="{hierarchyModel>Name}"
 				icon="sap-icon://folder-blank"/>
 	       	</Tree>
 <!--
@@ -74,7 +75,8 @@
 							},
 						groupHeaderFactory: '.createGroupHeader'
 					}"
-					busyIndicatorDelay="{masterView>/delay}"
+					busyIndicatorDelay="0"
+					enableBusyIndicator="true"
 					noDataText="{masterView>/noDataText}"
 					mode="{= ${device>/system/phone} ? 'None' : 'SingleSelectMaster'}"
 					growing="true"
@@ -101,7 +103,7 @@
 					</ObjectListItem>
 				</items>
 			</List>
--->		
+-->
 		</semantic:content>
 
 	</semantic:MasterPage>

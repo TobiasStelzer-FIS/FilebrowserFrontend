@@ -24,19 +24,22 @@ sap.ui.define([
 			 */
 			onInit : function () {
 				// Control state model
-				var oList1 = this.byId("list"),
-					oViewModel = this._createViewModel();
+				var oTree = this.byId("Tree"),
+					oViewModel = this._createViewModel(),
+					hierarchyModel = this.getModel("hierarchyModel");
 				
-				this.getModel("hierarchy").attachRequestCompleted(function () {
-					var oTree = this.getView().byId("Tree");
+				oTree.setBusy(true);
+				
+				hierarchyModel.attachEventOnce("requestCompleted", function () {
 					oTree.expandToLevel(1);
+					oTree.setBusy(false);
+					var oItem = oTree.getItems()[0];
+					oTree.setSelectedItem(oItem, true, true);
+					var oBinding = oTree.getBinding("items");
+					oBinding.attachEvent("change", this.onUpdateFinished, this);
 				}, this);
-				this.getModel("hierarchy").loadData("/applman/filebrowser?action=hierarchy");
-					// Put down master list's original value for busy indicator delay,
-					// so it can be restored later on. Busy handling on the master list is
-					// taken care of by the master list itself.
-//					iOriginalBusyDelay = oList.getBusyIndicatorDelay();
 
+				hierarchyModel.loadData("/backend/filebrowser?action=hierarchy");
 
 //				this._oList = oList;
 				// keeps the filter and search state
@@ -49,10 +52,6 @@ sap.ui.define([
 				// Make sure, busy indication is showing immediately so there is no
 				// break after the busy indication for loading the view's meta data is
 				// ended (see promise 'oWhenMetadataIsLoaded' in AppController)
-//				oList.attachEventOnce("updateFinished", function(){
-					// Restore original busy indicator delay for the list
-//					oViewModel.setProperty("/delay", iOriginalBusyDelay);
-//				});
 
 //				this.getView().addEventDelegate({
 //					onBeforeFirstShow: function () {
@@ -60,8 +59,6 @@ sap.ui.define([
 //					}.bind(this)
 //				});
 
-				var oTree = this.getView().byId("Tree");
-				oTree.expandToLevel(2);
 				this.getRouter().getRoute("master").attachPatternMatched(this._onMasterMatched, this);
 				this.getRouter().attachBypassed(this.onBypassed, this);
 			},
@@ -78,9 +75,9 @@ sap.ui.define([
 			 * @public
 			 */
 			onUpdateFinished : function (oEvent) {
-				console.log("asbcljlekwf");
+				//console.log("asbcljlekwf");
 				// update the master list object counter after new data is loaded
-				this._updateListItemCount(oEvent.getParameter("total"));
+			//	this._updateListItemCount(oEvent.getParameter("total"));
 				// hide pull to refresh if necessary
 				this.byId("pullToRefresh").hide();
 				this.byId("Tree").setBusy(false);
@@ -123,7 +120,10 @@ sap.ui.define([
 			 * @public
 			 */
 			onRefresh : function () {
-//				this._oList.getBinding("items").refresh();
+				var oTree = this.getView().byId("Tree");
+				this.getModel("hierarchyModel").loadData("/backend/filebrowser?action=hierarchy");
+				oTree.setBusy(true);
+				//this._oList.getBinding("items").refresh();
 			},
 
 
@@ -134,7 +134,6 @@ sap.ui.define([
 			 * @public
 			 */
 			onSelectionChange : function (oEvent) {
-				var test = oEvent.getSource();
 				// get the list item, either from the listItem parameter or from the event's source itself (will depend on the device-dependent mode).
 				this._showDetail(oEvent.getParameter("listItem") || oEvent.getSource());
 			},
@@ -201,7 +200,7 @@ sap.ui.define([
 						if (mParams.list.getMode() === "None") {
 							return;
 						}
-						var sObjectId = mParams.firstListitem.getBindingContext().getProperty("ApplicantId");
+						var sObjectId = mParams.firstListitem.getBindingContext().getProperty("Id");
 						this.getRouter().navTo("object", {objectId : sObjectId}, true);
 					}.bind(this),
 					function (mParams) {
@@ -222,7 +221,7 @@ sap.ui.define([
 			_showDetail : function (oItem) {
 				var bReplace = !Device.system.phone;
 				this.getRouter().navTo("object", {
-					objectId : oItem.getBindingContext("hierarchy").getProperty("Id")
+					objectId : oItem.getBindingContext("hierarchyModel").getProperty("Id")
 				}, bReplace);
 			},
 

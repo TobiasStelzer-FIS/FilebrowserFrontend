@@ -35,7 +35,8 @@
 		},
 		"supportedThemes": [
 			"sap_hcb",
-			"sap_bluecrystal"
+			"sap_bluecrystal",
+			"sap_belize"
 		]
 	},
 	"sap.ui5": {
@@ -96,7 +97,7 @@
 					]
 				},
 				{
-					"pattern": "Applicants/{objectId}",
+					"pattern": "Folder/{objectId}",
 					"name": "object",
 					"target": [
 						"master",

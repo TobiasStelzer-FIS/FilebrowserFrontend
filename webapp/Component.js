@@ -27,8 +27,8 @@ sap.ui.define([
 				// set the device model
 				this.setModel(models.createDeviceModel(), "device");
 
-				this.setModel(new JSONModel(), "hierarchy");
-				this.setModel(new JSONModel(), "folderContent");
+				this.setModel(new JSONModel(), "hierarchyModel");
+				this.setModel(new JSONModel(), "contentModel");
 				
 				// call the base component's init function and create the App view
 				UIComponent.prototype.init.apply(this, arguments);
