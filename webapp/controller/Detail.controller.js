@@ -74,10 +74,73 @@ sap.ui.define([
 				this.getModel("detailView").setProperty("/busy", true);
 			},
 
+			/**
+			 * Navigates to selected folder or opens selected file
+			 * @param {object} oEvent an event containing the source of the press-event
+			 * @private
+			 */
+			onItemPressed : function (oEvent) {
+				var oBindingContext = oEvent.getParameter("listItem").getBindingContext("contentModel");
+				var sId = oBindingContext.getProperty("Id");
+				
+				switch (oBindingContext.getProperty("Type")) {
+					case "Folder":
+						this._loadFolder(sId);
+						break;
+					case "Document":
+						this._loadDocument(sId);
+						break;
+				}
+			},
+			
+			/**
+			 * Deletes the corresponding folder or document
+			 * @param {object} oEvent an event containing the source of the press-event
+			 * @private
+			 */
+			onDeletePressed : function (oEvent) {
+				var oListItem = oEvent.getSource().getParent().getParent();
+				var oBindingContext = oListItem.getBindingContext("contentModel");
+				
+				this._deleteItem(oBindingContext.getProperty("Id"), oBindingContext.getProperty("Type") === "Folder");
+			},
+			
 			/* =========================================================== */
 			/* begin: internal methods                                     */
 			/* =========================================================== */
 
+			_loadFolder : function (sId) {
+				this.getModel("contentModel").loadData("/backend/filebrowser?action=navigate&id=" + sId);
+				this.getModel("detailView").setProperty("/busy", true);
+			},
+			
+			_loadDocument : function (sId) {
+				window.open("/backend/filebrowser/" + sId, '_blank');
+			},
+			
+			_reloadFolderContent : function () {
+				var sId = this.getModel("contentModel").getProperty("/SelectedFolder/Id");
+				
+				this._loadFolder(sId);
+			},
+			
+			_reloadHierarchy : function () {
+				this.getModel("hierarchyModel").loadData("/backend/filebrowser?action=hierarchy");
+				this.getModel("masterView").setProperty("/busy", true);
+			},
+			
+			_deleteItem : function (sId, bReloadHierarchy) {
+				$.ajax({
+					 type: "GET",
+					 url: "/backend/filebrowser?action=delete&id=" + sId,
+					 data: {}
+				}).always(function () {
+					this._reloadFolderContent();
+					if (bReloadHierarchy)
+						this._reloadHierarchy();
+				}.bind(this));
+			},
+			
 			/**
 			 * Binds the view to the object path and expands the aggregated line items.
 			 * @function
@@ -86,8 +149,12 @@ sap.ui.define([
 			 */
 			_onObjectMatched : function (oEvent) {
 				var sObjectId =  oEvent.getParameter("arguments").objectId;
+<<<<<<< Upstream, based on 593767ec33ee7437c36d7bee797bb302abda15a5
 				this.getModel("contentModel").loadData("/backend/filebrowser?action=navigate&id=" + sObjectId);
 				this.getModel("detailView").setProperty("/busy", true);
+=======
+				this._loadFolder(sObjectId);
+>>>>>>> 7d5cddd Implemented deleting functionality 
 				
 //				this.getModel().metadataLoaded().then( function() {
 //					var sObjectPath = this.getModel().createKey("Applicants", {

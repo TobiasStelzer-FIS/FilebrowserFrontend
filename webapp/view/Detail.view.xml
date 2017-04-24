@@ -4,7 +4,11 @@
 		busy="{detailView>/busy}" busyIndicatorDelay="{detailView>/delay}">
 		<semantic:content>
 			<Table id="folderContentTable" width="auto" items="{path: 'contentModel>/SelectedFolder/Children'}" updateFinished="onTableUpdateFinished"
+<<<<<<< Upstream, based on 593767ec33ee7437c36d7bee797bb302abda15a5
 				noDataText="{i18n>detailFolderContentTableNoDataText}" busyIndicatorDelay="{detailView>/lineItemTableDelay}" class="sapUiResponsiveMargin">
+=======
+				noDataText="{i18n>detailFolderContentTableNoDataText}" busyIndicatorDelay="{detailView>/lineItemTableDelay}" class="sapUiResponsiveMargin" itemPress="onItemPressed">
+>>>>>>> 7d5cddd Implemented deleting functionality 
 				<headerToolbar>
 					<Toolbar id="lineItemsToolbar">
 						<Breadcrumbs links="{path: 'contentModel>/SelectedFolder/Parents'}" currentLocationText="{contentModel>/SelectedFolder/Name}">
@@ -33,16 +37,19 @@
 					<Column></Column>
 				</columns>
 				<items>
-					<ColumnListItem>
+					<ColumnListItem type="Active">
 						<cells>
+<<<<<<< Upstream, based on 593767ec33ee7437c36d7bee797bb302abda15a5
 							<core:Icon src="sap-icon://folder-blank" decorative="true"/>
+=======
+							<core:Icon src="sap-icon://{=${contentModel>Type}==='Folder' ? 'folder-blank' : 'document'}" decorative="true"/>
+>>>>>>> 7d5cddd Implemented deleting functionality 
 							<ObjectIdentifier title="{contentModel>Name}" text="{ApplicationId}"/>
 							<Text text="{contentModel>Type}"/>
 							<Text text="{contentModel>Filesize}"/>
 							<Text text="test2"/>
 							<Toolbar design="Transparent">
-								<Button icon="sap-icon://download"/>
-								<Button icon="sap-icon://delete"/>
+								<Button icon="sap-icon://delete" press="onDeletePressed"/>
 							</Toolbar>
 						</cells>
 					</ColumnListItem>

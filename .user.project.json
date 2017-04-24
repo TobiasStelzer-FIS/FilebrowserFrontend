@@ -25,7 +25,11 @@
         "id": 87567846,
         "runnerId": "webapprunner",
         "displayName": "App",
+<<<<<<< Upstream, based on 593767ec33ee7437c36d7bee797bb302abda15a5
         "lastRunTimeStamp": 1493021219717
+=======
+        "lastRunTimeStamp": 1493032674691
+>>>>>>> 7d5cddd Implemented deleting functionality 
       }
     },
     {

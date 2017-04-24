@@ -10,11 +10,13 @@
 		"applicationVersion": {
 			"version": "1.0.0"
 		},
-		"dataSources": {
-		},
+		"dataSources": {},
 		"sourceTemplate": {
 			"id": "sap.ui.ui5-template-plugin.2masterdetail",
 			"version": "1.44.6"
+		},
+		"crossNavigation": {
+			"inbounds": {}
 		}
 	},
 	"sap.ui": {
@@ -33,11 +35,15 @@
 			"tablet": true,
 			"phone": true
 		},
+<<<<<<< Upstream, based on 593767ec33ee7437c36d7bee797bb302abda15a5
 		"supportedThemes": [
 			"sap_hcb",
 			"sap_bluecrystal",
 			"sap_belize"
 		]
+=======
+		"supportedThemes": ["sap_hcb", "sap_bluecrystal", "sap_belize"]
+>>>>>>> 7d5cddd Implemented deleting functionality 
 	},
 	"sap.ui5": {
 		"_version": "1.2.0",
@@ -80,13 +86,11 @@
 				"controlId": "idAppControl",
 				"controlAggregation": "detailPages",
 				"bypassed": {
-					"target": [
-						"master",
-						"notFound"
-					]
+					"target": ["master", "notFound"]
 				},
 				"async": true
 			},
+<<<<<<< Upstream, based on 593767ec33ee7437c36d7bee797bb302abda15a5
 			"routes": [
 				{
 					"pattern": "",
@@ -105,6 +109,18 @@
 					]
 				}
 			],
+=======
+			"routes": [{
+				"pattern": "",
+				"name": "master",
+				"target": ["object", "master"],
+				"greedy": false
+			}, {
+				"pattern": "Folder/{objectId}",
+				"name": "object",
+				"target": ["master", "object"]
+			}],
+>>>>>>> 7d5cddd Implemented deleting functionality 
 			"targets": {
 				"master": {
 					"viewName": "Master",
