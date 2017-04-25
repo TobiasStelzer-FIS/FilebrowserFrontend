@@ -71,6 +71,8 @@ sap.ui.define([
 				// hide pull to refresh if necessary
 				this.byId("pullToRefresh").hide();
 				this.getModel("masterView").setProperty("/busy", false);
+				var oTree = this.getView().byId("Tree");
+				oTree.rerender();
 			},
 
 			/**

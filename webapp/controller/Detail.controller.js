@@ -105,6 +105,36 @@ sap.ui.define([
 				this._deleteItem(oBindingContext.getProperty("Id"), oBindingContext.getProperty("Type") === "Folder");
 			},
 			
+			onCreateFolderPressed: function (oEvent) {
+				this._openDialog("CreateFolder");
+			},
+			
+			onUploadDocumentPressed: function (oEvent) {
+				
+			},
+			
+			onCreateFolderSave: function (oEvent) {
+				var oViewModel = this.getModel("detailView"),
+					oModel = this.getModel("contentModel");
+				var sFolderName = oViewModel.getProperty("/newFolderName"),
+					sId = oModel.getProperty("/SelectedFolder/Id");
+				
+				$.ajax({
+					 type: "GET",
+					 url: "/backend/filebrowser?action=createfolder&parentid=" + sId + "&name=" + sFolderName,
+					 data: {}
+				}).always(function () {
+					this._reloadFolderContent();
+					this._reloadHierarchy();
+				}.bind(this));
+				
+				this._closeDialog();
+			},
+			
+			onDialogCancel: function (oEvent) {
+				this._closeDialog();
+			},
+			
 			/* =========================================================== */
 			/* begin: internal methods                                     */
 			/* =========================================================== */
@@ -220,30 +250,31 @@ sap.ui.define([
 				oViewModel.setProperty("/shareSendEmailMessage",
 					oResourceBundle.getText("shareSendEmailObjectMessage", [sObjectName, sObjectId, location.href]));
 			},
-
-			_onMetadataLoaded : function () {
-				// Store original busy indicator delay for the detail view
-				var iOriginalViewBusyDelay = this.getView().getBusyIndicatorDelay(),
-					oViewModel = this.getModel("detailView"),
-					oLineItemTable = this.byId("lineItemsList"),
-					iOriginalLineItemTableBusyDelay = oLineItemTable.getBusyIndicatorDelay();
-
-				// Make sure busy indicator is displayed immediately when
-				// detail view is displayed for the first time
-				oViewModel.setProperty("/delay", 0);
-				oViewModel.setProperty("/lineItemTableDelay", 0);
-
-				oLineItemTable.attachEventOnce("updateFinished", function() {
-					// Restore original busy indicator delay for line item table
-					oViewModel.setProperty("/lineItemTableDelay", iOriginalLineItemTableBusyDelay);
-				});
-
-				// Binding the view will set it to not busy - so the view is always busy if it is not bound
-				oViewModel.setProperty("/busy", true);
-				// Restore original busy indicator delay for the detail view
-				oViewModel.setProperty("/delay", iOriginalViewBusyDelay);
+			
+			_getDialog: function(sFragmentName) {
+				if (!this._dialogs)
+					this._dialogs = [];
+					
+				var oDialog = this._dialogs[sFragmentName];
+	
+				if (!oDialog) {
+					oDialog = sap.ui.xmlfragment(this.getView().getId(), "de.fis.filebrowser.view.fragment." + sFragmentName, this);
+					this.getView().addDependent(oDialog);
+					this._dialogs[sFragmentName] = oDialog;
+				}
+				return oDialog;
+			},
+	
+			_openDialog: function(sFragmentName) {
+				this._currentDialog = this._getDialog(sFragmentName);
+				this._currentDialog.open();
+				return this._currentDialog;
+			},
+	
+			_closeDialog: function() {
+				this.getModel("detailView").setProperty("/newFolderName", "");
+				this._currentDialog.close();
 			}
-
 		});
 
 	}

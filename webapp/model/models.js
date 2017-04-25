@@ -28,7 +28,8 @@ sap.ui.define([
 			return new JSONModel({
 				busy: false,
 				delay: 0,
-				lineItemListTitle: ""
+				lineItemListTitle: "",
+				newFolderName: ""
 			});
 		}
 	};

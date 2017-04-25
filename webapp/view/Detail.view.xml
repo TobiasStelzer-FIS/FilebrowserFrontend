@@ -49,8 +49,9 @@
 				</items>
 			</Table>
 		</semantic:content>
-		<semantic:addAction>
-			<semantic:AddAction id="createFolder" press="onCreateFolder"/>
-		</semantic:addAction>
+		<semantic:customFooterContent>
+			<Button icon="sap-icon://upload" press="onUploadDocumentPressed"/>
+			<Button icon="sap-icon://add-coursebook" press="onCreateFolderPressed"/>
+		</semantic:customFooterContent>
 	</semantic:DetailPage>
 </mvc:View>
