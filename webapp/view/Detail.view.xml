@@ -50,8 +50,8 @@
 			</Table>
 		</semantic:content>
 		<semantic:customFooterContent>
-			<Button icon="sap-icon://upload" press="onUploadDocumentPressed"/>
-			<Button icon="sap-icon://add-coursebook" press="onCreateFolderPressed"/>
+			<Button icon="sap-icon://upload" text="Upload file" press="onUploadDocumentPressed"/>
+			<Button icon="sap-icon://add-coursebook" text="Create folder" press="onCreateFolderPressed"/>
 		</semantic:customFooterContent>
 	</semantic:DetailPage>
 </mvc:View>

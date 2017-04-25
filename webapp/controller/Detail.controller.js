@@ -2,8 +2,9 @@
 sap.ui.define([
 		"de/fis/filebrowser/controller/BaseController",
 		"sap/ui/model/json/JSONModel",
+		"sap/ui/unified/FileUploaderParameter",
 		"de/fis/filebrowser/model/formatter"
-	], function (BaseController, JSONModel, formatter) {
+	], function (BaseController, JSONModel, FileUploaderParameter, formatter) {
 		"use strict";
 
 		return BaseController.extend("de.fis.filebrowser.controller.Detail", {
@@ -30,8 +31,6 @@ sap.ui.define([
 				this.getRouter().getRoute("object").attachPatternMatched(this._onObjectMatched, this);
 
 				this.setModel(oViewModel, "detailView");
-
-//				this.getOwnerComponent().getModel().metadataLoaded().then(this._onMetadataLoaded.bind(this));
 			},
 
 			/* =========================================================== */
@@ -110,7 +109,7 @@ sap.ui.define([
 			},
 			
 			onUploadDocumentPressed: function (oEvent) {
-				
+				this._openDialog("UploadDocument");
 			},
 			
 			onCreateFolderSave: function (oEvent) {
@@ -127,6 +126,24 @@ sap.ui.define([
 					this._reloadFolderContent();
 					this._reloadHierarchy();
 				}.bind(this));
+				
+				this._closeDialog();
+			},
+			
+			onUploadDocumentSave: function (oEvent) {
+				var oFileUploader = this.getView().byId("fileUploader");
+				var sData = "";
+				
+				sData += "action:" + "upload;";
+				sData += "name:" + oFileUploader.getValue() + ";";
+				sData += "parentid:" + this._getIdOfSelectedFolder();
+
+				oFileUploader.setAdditionalData(sData);
+				oFileUploader.attachEvent("uploadComplete", function () {
+					this._reloadFolderContent();
+					this._reloadHierarchy();
+				}, this);
+				oFileUploader.upload();
 				
 				this._closeDialog();
 			},
@@ -155,7 +172,7 @@ sap.ui.define([
 			},
 			
 			_reloadFolderContent : function () {
-				var sId = this.getModel("contentModel").getProperty("/SelectedFolder/Id");
+				var sId = this._getIdOfSelectedFolder();
 				
 				this._loadFolder(sId);
 			},
@@ -175,6 +192,10 @@ sap.ui.define([
 					if (bReloadHierarchy)
 						this._reloadHierarchy();
 				}.bind(this));
+			},
+			
+			_getIdOfSelectedFolder: function () {
+				return this.getModel("contentModel").getProperty("/SelectedFolder/Id");
 			},
 			
 			/**
