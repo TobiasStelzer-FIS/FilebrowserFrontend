@@ -39,8 +39,8 @@
 							<core:Icon src="sap-icon://{=${contentModel>Type}==='Folder' ? 'folder-blank' : 'document'}" decorative="true"/>
 							<ObjectIdentifier title="{contentModel>Name}" text="{ApplicationId}"/>
 							<Text text="{contentModel>Type}"/>
+							<Text text="{contentModel>Last Modification}"/>
 							<Text text="{contentModel>Filesize}"/>
-							<Text text="test2"/>
 							<HBox>
 								<Button class="transparentButton" icon="sap-icon://delete" press="onDeletePressed"/>
 							</HBox>

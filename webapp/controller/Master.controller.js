@@ -112,17 +112,16 @@ sap.ui.define([
 			 * @public
 			 */
 			onRefresh : function () {
-				var oTree = this.getView().byId("Tree");
 				this.getModel("hierarchyModel").loadData("/backend/filebrowser?action=hierarchy");
 				this.getModel("masterView").setProperty("/busy", true);
 			},
 
 			/**
-			 * Event handler for the list selection event
-			 * @param {sap.ui.base.Event} oEvent the list selectionChange event
+			 * Event handler for the tree item pressed event
+			 * @param {sap.ui.base.Event} oEvent the list itemPress event
 			 * @public
 			 */
-			onSelectionChange : function (oEvent) {
+			onItemPressed : function (oEvent) {
 				// get the list item, either from the listItem parameter or from the event's source itself (will depend on the device-dependent mode).
 				this._showDetail(oEvent.getParameter("listItem") || oEvent.getSource());
 			},

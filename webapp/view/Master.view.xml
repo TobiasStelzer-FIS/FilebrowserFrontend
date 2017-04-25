@@ -39,73 +39,14 @@
 				includeItemInSelection="true"
 				busyIndicatorDelay="{masterView>/delay}"
 				busy="{masterView>/busy}"
-				selectionChange="onSelectionChange"
+				itemPress="onItemPressed"
 				updateFinished="onUpdateFinished">
-				<headerToolbar>
-				<!--
-				<Toolbar>
-					<content>
-						<Title text="Nodes" level="H2" />
-						<ToolbarSpacer />
-						<Select
-							selectedKey="MultiSelect"
-							change="handleSelectChange">
-							<items>
-								<core:Item key="None" text="No Selection" />
-								<core:Item key="SingleSelect" text="Single Selection" />
-								<core:Item key="SingleSelectLeft" text="Single Selection Left" />
-								<core:Item key="SingleSelectMaster" text="Single Selection (Master)" />
-								<core:Item key="MultiSelect" text="Multi Selection" />
-							</items>
-						</Select>
-					</content>
-				</Toolbar>
-				-->
-			</headerToolbar>
 	       		<StandardTreeItem
 				title="{hierarchyModel>Name}"
-				icon="sap-icon://folder-blank"/>
+				icon="sap-icon://folder-blank"
+				type="Active"/>
 	       	</Tree>
-<!--
-			<List
-					id="list"
-					items="{
-						path: '/Applicants',
-						sorter: {
-							path: 'Lastname',
-							descending: false
-							},
-						groupHeaderFactory: '.createGroupHeader'
-					}"
-					busyIndicatorDelay="0"
-					enableBusyIndicator="true"
-					noDataText="{masterView>/noDataText}"
-					mode="{= ${device>/system/phone} ? 'None' : 'SingleSelectMaster'}"
-					growing="true"
-					growingScrollToLoad="true"
-					updateFinished="onUpdateFinished"
-					selectionChange="onSelectionChange">
-				<infoToolbar>
-					<Toolbar
-							active="true"
-							id="filterBar"
-							visible="{masterView>/isFilterBarVisible}"
-							press="onOpenViewSettings">
-						<Title
-								id="filterBarLabel"
-								text="{masterView>/filterBarLabel}" />
-					</Toolbar>
-				</infoToolbar>
-				<items>
-					<ObjectListItem
-							type="{= ${device>/system/phone} ? 'Active' : 'Inactive'}"
-							press="onSelectionChange"
-							title="{Lastname}"
->
-					</ObjectListItem>
-				</items>
-			</List>
--->
+
 		</semantic:content>
 
 	</semantic:MasterPage>
