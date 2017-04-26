@@ -29,7 +29,8 @@ sap.ui.define([
 				busy: false,
 				delay: 0,
 				lineItemListTitle: "",
-				newFolderName: ""
+				newFolderName: "",
+				valueFileUploader: ""
 			});
 		}
 	};

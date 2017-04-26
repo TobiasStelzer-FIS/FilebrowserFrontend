@@ -9,6 +9,7 @@
 				<form:FormElement label="Choose file">
 					<u:FileUploader id="fileUploader"
 								name="fileUploader"
+								value="{detailView>/valueFileUploader}"
 								uploadUrl="/backend/filebrowser"
 								multiple="false"
 								uploadComplete="onUploadFileComplete">
@@ -17,8 +18,8 @@
 			</form:FormContainer>
 		</form:Form>
 		<buttons>
-			<Button id="btnUploadDocumentSave" text="{i18n>DetailSaveButton}" press="onUploadDocumentSave"/>
-			<Button id="btnUploadDocumentCancel" text="{i18n>DetailCancelButton}" press="onDialogCancel"/>
+			<Button id="btnUploadDocumentSave" text="{i18n>detailSaveButton}" press="onUploadDocumentSave"/>
+			<Button id="btnUploadDocumentCancel" text="{i18n>detailCancelButton}" press="onDialogCancel"/>
 		</buttons>
 	</Dialog>
 </core:FragmentDefinition>

@@ -313,6 +313,7 @@ sap.ui.define([
 	
 			_closeDialog: function() {
 				this.getModel("detailView").setProperty("/newFolderName", "");
+				this.getModel("detailView").setProperty("/valueFileUploader", "");
 				this._currentDialog.close();
 			}
 		});

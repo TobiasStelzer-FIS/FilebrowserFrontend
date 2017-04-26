@@ -49,8 +49,8 @@
 			</Table>
 		</semantic:content>
 		<semantic:customFooterContent>
-			<Button icon="sap-icon://upload" text="Upload file" press="onUploadDocumentPressed"/>
-			<Button icon="sap-icon://add-coursebook" text="Create folder" press="onCreateFolderPressed"/>
+			<Button icon="sap-icon://upload" text="{i18n>detailUploadFileButton}" press="onUploadDocumentPressed"/>
+			<Button icon="sap-icon://add-coursebook" text="{i18n>detailCreateFolderButton}" press="onCreateFolderPressed"/>
 		</semantic:customFooterContent>
 	</semantic:DetailPage>
 </mvc:View>
