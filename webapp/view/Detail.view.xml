@@ -5,13 +5,14 @@
 		<semantic:content>
 			<Table id="folderContentTable" width="auto" items="{path: 'contentModel>/SelectedFolder/Children'}" updateFinished="onTableUpdateFinished"
 				noDataText="{i18n>detailFolderContentTableNoDataText}" busyIndicatorDelay="{detailView>/lineItemTableDelay}" class="sapUiResponsiveMargin"
-				itemPress="onItemPressed">
+				itemPress="onItemPressed" fixedLayout="false">
 				<headerToolbar>
 					<Toolbar id="lineItemsToolbar">
-						<Breadcrumbs links="{path: 'contentModel>/SelectedFolder/Parents'}" currentLocationText="{contentModel>/SelectedFolder/Name}">
-							<Link text="{contentModel>Name}" press="onBreadcrumbPress"/>
-						</Breadcrumbs>
-						<!--<Title id="lineItemsHeader" text="{detailView>/lineItemListTitle}"/>-->
+						<VBox width="100%">
+							<Breadcrumbs links="{path: 'contentModel>/SelectedFolder/Parents'}" currentLocationText="{contentModel>/SelectedFolder/Name}">
+								<Link text="{contentModel>Name}" press="onBreadcrumbPress"/>
+							</Breadcrumbs>
+						</VBox>
 					</Toolbar>
 				</headerToolbar>
 				<columns>
@@ -19,19 +20,17 @@
 					<Column>
 						<Text text="{i18n>detailFolderContentTableIDColumn}"/>
 					</Column>
-					<Column>
+					<Column width="auto" minScreenWidth="Small">
 						<Text text="{i18n>detailFolderContentTableFiletypeColumn}"/>
 					</Column>
-					<Column>
+					<Column minScreenWidth="Small" demandPopin="true">
 						<Text text="{i18n>detailFolderContentTableLastModificationColumn}"/>
 					</Column>
-					<Column>
+					<Column minScreenWidth="Small" demandPopin="true">
 						<Text text="{i18n>detailFolderContentTableFilesizeColumn}"/>
 					</Column>
-					<Column hAlign="Right">
-						<Text text="{i18n>detailFolderContentTableUnitNumberColumn}"/>
+					<Column hAlign="Right" width="10%">
 					</Column>
-					<Column></Column>
 				</columns>
 				<items>
 					<ColumnListItem type="Active">
@@ -39,7 +38,7 @@
 							<core:Icon src="sap-icon://{=${contentModel>Type}==='Folder' ? 'folder-blank' : 'document'}" decorative="true"/>
 							<ObjectIdentifier title="{contentModel>Name}" text="{ApplicationId}"/>
 							<Text text="{contentModel>Type}"/>
-							<Text text="{contentModel>Last Modification}"/>
+							<Text text="{path: 'contentModel>Last Modification', formatter: '.formatter.formatDate'}"/>
 							<Text text="{contentModel>Filesize}"/>
 							<HBox>
 								<Button class="transparentButton" icon="sap-icon://delete" press="onDeletePressed"/>

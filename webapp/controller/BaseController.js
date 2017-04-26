@@ -58,6 +58,25 @@ sap.ui.define([
 				} else {
 					this.getRouter().navTo("master", {}, true);
 				}
+			},
+			
+			myNavToWithoutHash : function (oOptions) {
+				var oSplitApp = this._findSplitApp(oOptions.currentView);
+		
+				// Load view, add it to the page aggregation, and navigate to it
+				var oView = this.getView(oOptions.targetViewName, oOptions.targetViewType);
+				oSplitApp.addPage(oView, oOptions.isMaster);
+				oSplitApp.to(oView.getId(), oOptions.transition || "show", oOptions.data);
+			},
+			
+			_findSplitApp : function(oControl) {
+				var sAncestorControlName = "idAppControl";
+		
+				if (oControl instanceof sap.ui.core.mvc.View && oControl.byId(sAncestorControlName)) {
+					return oControl.byId(sAncestorControlName);
+				}
+		
+				return oControl.getParent() ? this._findSplitApp(oControl.getParent(), sAncestorControlName) : null;
 			}
 
 		});

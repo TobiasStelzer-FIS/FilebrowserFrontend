@@ -42,7 +42,6 @@ sap.ui.define([
 
 				hierarchyModel.loadData("/backend/filebrowser?action=hierarchy");
 
-//				this._oList = oList;
 				// keeps the filter and search state
 				this._oListFilterState = {
 					aSearch : []

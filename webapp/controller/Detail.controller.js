@@ -1,10 +1,11 @@
 /*global location */
 sap.ui.define([
 		"de/fis/filebrowser/controller/BaseController",
+		"sap/ui/Device",
 		"sap/ui/model/json/JSONModel",
 		"sap/ui/unified/FileUploaderParameter",
 		"de/fis/filebrowser/model/formatter"
-	], function (BaseController, JSONModel, FileUploaderParameter, formatter) {
+	], function (BaseController, Device, JSONModel, FileUploaderParameter, formatter) {
 		"use strict";
 
 		return BaseController.extend("de.fis.filebrowser.controller.Detail", {
@@ -16,21 +17,23 @@ sap.ui.define([
 			/* =========================================================== */
 
 			onInit : function () {
-				// Model used to manipulate control states. The chosen values make sure,
-				// detail page is busy indication immediately so there is no break in
-				// between the busy indication for loading the view's meta data
-				var oViewModel = new JSONModel({
-					busy : false,
-					delay : 0,
-					lineItemListTitle : this.getResourceBundle().getText("detailFolderContentTableHeading")
-				});
 
-				this.getModel("contentModel").attachEvent("requestCompleted", function() {
-					oViewModel.setProperty("/busy", false);
+				this.getModel("contentModel").attachEvent("requestCompleted", function(oEvent) {
+					
+					if (!oEvent.getParameter("success")) {
+						this.getRouter().getTargets().display("detailObjectNotFound");
+					}
+					
+					//if (false) {
+					//sap.ui.core.UIComponent.getRouterFor(this).myNavToWithoutHash({
+					//		currentView : oView,
+					//		targetViewName : "sap.ui.demo.tdg.view.NotFound",
+					//		targetViewType : "XML"
+					//	});
+					//}
+					this.getModel("detailView").setProperty("/busy", false);
 				}, this);
 				this.getRouter().getRoute("object").attachPatternMatched(this._onObjectMatched, this);
-
-				this.setModel(oViewModel, "detailView");
 			},
 
 			/* =========================================================== */
@@ -67,10 +70,9 @@ sap.ui.define([
 			onBreadcrumbPress : function (oEvent) {
 				var oSource = oEvent.getSource();
 				var oBindingContext = oSource.getBindingContext("contentModel");
-				var sObjectId = oBindingContext.getProperty("Id");
-				
-				this.getModel("contentModel").loadData("/backend/filebrowser?action=navigate&id=" + sObjectId);
-				this.getModel("detailView").setProperty("/busy", true);
+				var sId = oBindingContext.getProperty("Id");
+
+				this._loadFolder(sId);
 			},
 
 			/**
@@ -136,7 +138,7 @@ sap.ui.define([
 				
 				sData += "action:" + "upload;";
 				sData += "name:" + oFileUploader.getValue() + ";";
-				sData += "parentid:" + this._getIdOfSelectedFolder();
+				sData += "parentid:" + this._getSelectedFolderId();
 
 				oFileUploader.setAdditionalData(sData);
 				oFileUploader.attachEvent("uploadComplete", function () {
@@ -172,7 +174,7 @@ sap.ui.define([
 			},
 			
 			_reloadFolderContent : function () {
-				var sId = this._getIdOfSelectedFolder();
+				var sId = this._getSelectedFolderId();
 				
 				this._loadFolder(sId);
 			},
@@ -194,7 +196,7 @@ sap.ui.define([
 				}.bind(this));
 			},
 			
-			_getIdOfSelectedFolder: function () {
+			_getSelectedFolderId: function () {
 				return this.getModel("contentModel").getProperty("/SelectedFolder/Id");
 			},
 			
@@ -270,6 +272,23 @@ sap.ui.define([
 					oResourceBundle.getText("shareSendEmailObjectSubject", [sObjectId]));
 				oViewModel.setProperty("/shareSendEmailMessage",
 					oResourceBundle.getText("shareSendEmailObjectMessage", [sObjectName, sObjectId, location.href]));
+			},
+			
+			onNavBack: function () {
+				this.getRouter().navTo("master");
+			},
+			
+			/**
+			 * Shows the selected item on the detail page
+			 * On phones a additional history entry is created
+			 * @param {sap.m.ObjectListItem} oItem selected Item
+			 * @private
+			 */
+			_showDetail : function (sObjectId) {
+				var bReplace = !Device.system.phone;
+				this.getRouter().navTo("object", {
+					objectId : sObjectId
+				}, bReplace);
 			},
 			
 			_getDialog: function(sFragmentName) {

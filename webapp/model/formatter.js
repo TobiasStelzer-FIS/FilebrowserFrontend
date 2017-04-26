@@ -3,26 +3,15 @@ sap.ui.define([
 		"use strict";
 
 		return {
-			/**
-			 * Rounds the currency value to 2 digits
-			 *
-			 * @public
-			 * @param {string} sValue value to be formatted
-			 * @returns {string} formatted currency value with 2 digits
-			 */
-			currencyValue : function (sValue) {
-				if (!sValue) {
+
+			formatDate: function (iMillis) {
+				if (!iMillis) {
 					return "";
 				}
-
-				return parseFloat(sValue).toFixed(2);
-			},
-			
-			getIcon: function (sName) {
-				var p = this.getParent();
-				var id = this.getId();
-				var oItem = this.getView().byId(id);
-				var oTreeItem = this;
+				
+				var oDate = new Date(parseInt(iMillis));
+				
+				return oDate.toLocaleDateString() + " " + oDate.toLocaleTimeString();
 			}
 		};
 
