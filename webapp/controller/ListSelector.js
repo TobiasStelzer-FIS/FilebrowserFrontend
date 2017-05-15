@@ -102,6 +102,24 @@ sap.ui.define([
 				);
 			},
 
+			selectItemById: function (sId) {
+				var oList = this._oList;
+				var aListItems = oList.getItems();
+				var oBinding = oList.getBinding("items");
+				var oNode = oBinding.getNodeByIndex(0);
+				
+				aListItems.some(function (oItem) {
+					var oBindingContext = oItem.getBindingContext("hierarchyModel");
+					var currentId = oBindingContext.getProperty("Id");
+					
+					if (currentId && currentId === sId) {
+						oList.setSelectedItem(oItem);
+						console.log("Out of " + aListItems.length + " items in the list 1 match was found");
+						return true;
+					}
+					console.log("Out of " + aListItems.length + " items in the list 0 matches were found");
+				});
+			},
 
 			/* =========================================================== */
 			/* Convenience Functions for List Selection Change Event       */

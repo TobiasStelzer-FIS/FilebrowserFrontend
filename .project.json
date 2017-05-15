@@ -12,7 +12,8 @@
     "excludedFiles": [
       "test.html"
     ],
-    "buildRequired": true
+    "buildRequired": true,
+    "lastBuildDateTime": "Fri, 28 Apr 2017 08:07:33 GMT"
   },
   "dataBinding": {
     "/webapp/view/App.view.xml": {
@@ -66,5 +67,10 @@
     "notifyBeforePushLevel": "Error",
     "blockPush": false,
     "blockPushLevel": "Error"
+  },
+  "hcpdeploy": {
+    "account": "p1942281469trial",
+    "name": "filebrowser",
+    "lastVersionWeTriedToDeploy": "1.0.0"
   }
 }

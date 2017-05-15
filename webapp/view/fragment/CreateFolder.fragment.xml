@@ -12,7 +12,7 @@
 			</form:FormContainer>
 		</form:Form>
 		<buttons>
-			<Button id="btnCreateFolderSave" text="{i18n>detailSaveButton}" press="onCreateFolderSave"/>
+			<Button id="btnCreateFolderSave" text="{i18n>detailCreateButton}" press="onCreateFolderSave"/>
 			<Button id="btnCreateFolderCancel" text="{i18n>detailCancelButton}" press="onDialogCancel"/>
 		</buttons>
 	</Dialog>

@@ -24,9 +24,14 @@ sap.ui.define([
 				this.oListSelector = new ListSelector();
 				this._oErrorHandler = new ErrorHandler(this);
 
+				// this variable contains the path which is used to make
+				// request to the backend (sRootPath + "/filebrowser?....")
+				this.sRootPath = window.location.pathname;
+				
 				// set the device model
 				this.setModel(models.createDeviceModel(), "device");
 
+				// set the ViewModels
 				this.setModel(models.createMasterViewModel(), "masterView");
 				this.setModel(models.createDetailViewModel(), "detailView");
 				

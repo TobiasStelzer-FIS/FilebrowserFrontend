@@ -29,17 +29,16 @@
 					<Column minScreenWidth="Small" demandPopin="true">
 						<Text text="{i18n>detailFolderContentTableFilesizeColumn}"/>
 					</Column>
-					<Column hAlign="Right" width="10%">
-					</Column>
+					<Column hAlign="Right" width="10%"></Column>
 				</columns>
 				<items>
 					<ColumnListItem type="Active">
 						<cells>
-							<core:Icon src="sap-icon://{=${contentModel>Type}==='Folder' ? 'folder-blank' : 'document'}" decorative="true"/>
+							<core:Icon src="sap-icon://{=${contentModel>Type}==='Folder' ? 'folder-blank' : 'document-text'}" decorative="true"/>
 							<ObjectIdentifier title="{contentModel>Name}" text="{ApplicationId}"/>
 							<Text text="{contentModel>Type}"/>
 							<Text text="{path: 'contentModel>Last Modification', formatter: '.formatter.formatDate'}"/>
-							<Text text="{contentModel>Filesize}"/>
+							<Text text="{path: 'contentModel>Filesize', formatter: '.formatter.formatFilesize'}"/>
 							<HBox>
 								<Button class="transparentButton" icon="sap-icon://delete" press="onDeletePressed"/>
 							</HBox>
