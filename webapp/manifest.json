@@ -94,7 +94,7 @@
 					"pattern": "",
 					"name": "master",
 					"target": [
-						"object",
+						"detailNoObjectSelected",
 						"master"
 					]
 				},
@@ -130,6 +130,10 @@
 				"notFound": {
 					"viewName": "NotFound",
 					"viewId": "notFound"
+				},
+				"detailNoObjectSelected": {
+					"viewName": "DetailNoObjectSelected",
+					"viewId": "detailNoObjectSelected"
 				}
 			}
 		},
