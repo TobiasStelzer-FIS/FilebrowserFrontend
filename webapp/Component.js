@@ -26,7 +26,7 @@ sap.ui.define([
 
 				// this variable contains the path which is used to make
 				// request to the backend (sRootPath + "/filebrowser?....")
-				this.sRootPath = window.location.pathname;
+				this.sRootPath = "/backend/";
 				
 				// set the device model
 				this.setModel(models.createDeviceModel(), "device");
