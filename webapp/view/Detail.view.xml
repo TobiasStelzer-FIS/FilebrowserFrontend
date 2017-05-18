@@ -41,6 +41,7 @@
 							<Text text="{path: 'contentModel>Filesize', formatter: '.formatter.formatFilesize'}"/>
 							<HBox>
 								<Button class="transparentButton" icon="sap-icon://delete" press="onDeletePressed"/>
+								<Button class="transparentButton" icon="sap-icon://edit" press="onEditPressed"/>
 							</HBox>
 						</cells>
 					</ColumnListItem>

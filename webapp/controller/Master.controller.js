@@ -1,15 +1,16 @@
 /*global history */
-sap.ui.define([ "de/fis/filebrowser/controller/BaseController",
-		"sap/ui/model/json/JSONModel", "sap/ui/model/Filter",
-		"sap/ui/model/FilterOperator", "sap/m/GroupHeaderListItem",
-		"sap/ui/Device", "de/fis/filebrowser/model/formatter" ], function(
-		BaseController, JSONModel, Filter, FilterOperator, GroupHeaderListItem,
-		Device, formatter) {
+sap.ui.define(["de/fis/filebrowser/controller/BaseController",
+	"sap/ui/model/json/JSONModel", "sap/ui/model/Filter",
+	"sap/ui/model/FilterOperator", "sap/m/GroupHeaderListItem",
+	"sap/ui/Device", "de/fis/filebrowser/model/formatter"
+], function(
+	BaseController, JSONModel, Filter, FilterOperator, GroupHeaderListItem,
+	Device, formatter) {
 	"use strict";
 
 	return BaseController.extend("de.fis.filebrowser.controller.Master", {
 
-		formatter : formatter,
+		formatter: formatter,
 
 		/* =========================================================== */
 		/* lifecycle methods */
@@ -22,11 +23,13 @@ sap.ui.define([ "de/fis/filebrowser/controller/BaseController",
 		 * 
 		 * @public
 		 */
-		onInit : function() {
+		onInit: function() {
 			// Control state model
-			var oTree = this.byId("Tree"), hierarchyModel = this
-					.getModel("hierarchyModel"), oViewModel = this
-					.getModel("masterView");
+			var oTree = this.byId("Tree"),
+				hierarchyModel = this
+				.getModel("hierarchyModel"),
+				oViewModel = this
+				.getModel("masterView");
 
 			this.getOwnerComponent().oListSelector.setBoundMasterList(oTree);
 			this._initViewModel();
@@ -36,18 +39,17 @@ sap.ui.define([ "de/fis/filebrowser/controller/BaseController",
 				oTree.expandToLevel(1);
 				oViewModel.setProperty("/busy", false);
 				var oItem = oTree.getItems()[0];
-				//oTree.setSelectedItem(oItem, true, true);
-				//this._showDetail(oItem);
+				// oTree.setSelectedItem(oItem, true, true);
+				// this._showDetail(oItem);
 				var oBinding = oTree.getBinding("items");
 				oBinding.attachEvent("change", this.onUpdateFinished, this);
 			}, this);
 
-			hierarchyModel.loadData(this.getOwnerComponent().sRootPath
-					+ "filebrowser?action=hierarchy");
+			hierarchyModel.loadData(this.getOwnerComponent().sRootPath + "?action=hierarchy");
 
 			// keeps the filter and search state
 			this._oListFilterState = {
-				aSearch : []
+				aSearch: []
 			};
 
 			// Make sure, busy indication is showing immediately so there is no
@@ -56,7 +58,7 @@ sap.ui.define([ "de/fis/filebrowser/controller/BaseController",
 			// ended (see promise 'oWhenMetadataIsLoaded' in AppController)
 
 			this.getRouter().getRoute("master").attachPatternMatched(
-					this._onMasterMatched, this);
+				this._onMasterMatched, this);
 			this.getRouter().attachBypassed(this.onBypassed, this);
 		},
 
@@ -72,7 +74,7 @@ sap.ui.define([ "de/fis/filebrowser/controller/BaseController",
 		 *            oEvent the update finished event
 		 * @public
 		 */
-		onUpdateFinished : function(oEvent) {
+		onUpdateFinished: function(oEvent) {
 			// hide pull to refresh if necessary
 			this.byId("pullToRefresh").hide();
 			this.getModel("masterView").setProperty("/busy", false);
@@ -86,9 +88,9 @@ sap.ui.define([ "de/fis/filebrowser/controller/BaseController",
 		 * 
 		 * @public
 		 */
-		onRefresh : function() {
+		onRefresh: function() {
 			this.getModel("hierarchyModel").loadData(
-					this.getOwnerComponent().sRootPath + "filebrowser?action=hierarchy");
+				this.getOwnerComponent().sRootPath + "?action=hierarchy");
 			this.getModel("masterView").setProperty("/busy", true);
 		},
 
@@ -99,7 +101,7 @@ sap.ui.define([ "de/fis/filebrowser/controller/BaseController",
 		 *            oEvent the list itemPress event
 		 * @public
 		 */
-		onItemPressed : function(oEvent) {
+		onItemPressed: function(oEvent) {
 			// get the list item, either from the listItem parameter or from the
 			// event's source itself (will depend on the device-dependent mode).
 			var oItem = oEvent.getParameter("listItem") || oEvent.getSource();
@@ -114,7 +116,7 @@ sap.ui.define([ "de/fis/filebrowser/controller/BaseController",
 		 * 
 		 * @public
 		 */
-		onBypassed : function() {
+		onBypassed: function() {
 			this.getView().byId("Tree").removeSelections(true);
 		},
 
@@ -124,7 +126,7 @@ sap.ui.define([ "de/fis/filebrowser/controller/BaseController",
 		 * 
 		 * @public
 		 */
-		onNavBack : function() {
+		onNavBack: function() {
 			history.go(-1);
 		},
 
@@ -132,13 +134,13 @@ sap.ui.define([ "de/fis/filebrowser/controller/BaseController",
 		/* begin: internal methods */
 		/* =========================================================== */
 
-		_initViewModel : function() {
+		_initViewModel: function() {
 			var oModel = this.getModel("masterView");
 
 			oModel.setProperty("title", this.getResourceBundle().getText(
-					"masterTitleCount", [ 0 ]));
+				"masterTitleCount", [0]));
 			oModel.setProperty("noDataText", this.getResourceBundle().getText(
-					"masterListNoDataText"));
+				"masterListNoDataText"));
 		},
 
 		/**
@@ -148,24 +150,25 @@ sap.ui.define([ "de/fis/filebrowser/controller/BaseController",
 		 * 
 		 * @private
 		 */
-		_onMasterMatched : function() {
+		_onMasterMatched: function() {
 			this.getOwnerComponent().oListSelector.oWhenListLoadingIsDone.then(
-					function(mParams) {
-						if (mParams.list.getMode() === "None") {
-							return;
-						}
-						var sObjectId = mParams.firstListitem
-								.getBindingContext().getProperty("Id");
-						this.getRouter().navTo("object", {
-							objectId : sObjectId
-						}, true);
-					}.bind(this), function(mParams) {
-						if (mParams.error) {
-							return;
-						}
-						this.getRouter().getTargets().display(
-								"detailNoObjectsAvailable");
-					}.bind(this));
+				function(mParams) {
+					if (mParams.list.getMode() === "None") {
+						return;
+					}
+					var sObjectId = mParams.firstListitem
+						.getBindingContext().getProperty("Id");
+					this.getRouter().navTo("object", {
+						objectId: sObjectId
+					}, true);
+				}.bind(this),
+				function(mParams) {
+					if (mParams.error) {
+						return;
+					}
+					this.getRouter().getTargets().display(
+						"detailNoObjectsAvailable");
+				}.bind(this));
 		},
 
 		/**
@@ -176,14 +179,13 @@ sap.ui.define([ "de/fis/filebrowser/controller/BaseController",
 		 *            oItem selected Item
 		 * @private
 		 */
-		_showDetail : function(oItem) {
+		_showDetail: function(oItem) {
 			var bReplace = !Device.system.phone;
 			this.getRouter().navTo(
-					"object",
-					{
-						objectId : oItem.getBindingContext("hierarchyModel")
-								.getProperty("Id")
-					}, bReplace);
+				"object", {
+					objectId: oItem.getBindingContext("hierarchyModel")
+						.getProperty("Id")
+				}, bReplace);
 		},
 
 		/**
@@ -192,10 +194,11 @@ sap.ui.define([ "de/fis/filebrowser/controller/BaseController",
 		 * 
 		 * @private
 		 */
-		_applyFilterSearch : function() {
+		_applyFilterSearch: function() {
 			var aFilters = this._oListFilterState.aSearch
-					.concat(this._oListFilterState.aFilter), oViewModel = this
-					.getModel("masterView");
+				.concat(this._oListFilterState.aFilter),
+				oViewModel = this
+				.getModel("masterView");
 			var oTree = this.getView().byId("Tree");
 
 			oTree.getBinding("items").filter(aFilters, "Application");
@@ -204,12 +207,12 @@ sap.ui.define([ "de/fis/filebrowser/controller/BaseController",
 			// results
 			if (aFilters.length !== 0) {
 				oViewModel.setProperty("/noDataText", this.getResourceBundle()
-						.getText("masterListNoDataWithFilterOrSearchText"));
+					.getText("masterListNoDataWithFilterOrSearchText"));
 			} else if (this._oListFilterState.aSearch.length > 0) {
 				// only reset the no data text to default when no new search was
 				// triggered
 				oViewModel.setProperty("/noDataText", this.getResourceBundle()
-						.getText("masterListNoDataText"));
+					.getText("masterListNoDataText"));
 			}
 		}
 
