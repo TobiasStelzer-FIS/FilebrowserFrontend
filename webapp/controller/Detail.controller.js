@@ -107,6 +107,15 @@ sap.ui.define([
 
 			this._deleteItem(oBindingContext.getProperty("Id"), oBindingContext.getProperty("Type") === "Folder");
 		},
+		
+		/**
+		 * Switches the row to edit mode, so that the name of the Folder/File can be changed
+		 * @param {object} oEvent an event containing the source of the press-event
+		 * @private
+		 */
+		onEditPressed: function(oEvent) {
+			
+		},
 
 		onCreateFolderPressed: function(oEvent) {
 			this._openDialog("CreateFolder");
