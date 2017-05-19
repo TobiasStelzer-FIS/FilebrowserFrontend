@@ -107,14 +107,58 @@ sap.ui.define([
 
 			this._deleteItem(oBindingContext.getProperty("Id"), oBindingContext.getProperty("Type") === "Folder");
 		},
-		
+
 		/**
 		 * Switches the row to edit mode, so that the name of the Folder/File can be changed
 		 * @param {object} oEvent an event containing the source of the press-event
 		 * @private
 		 */
 		onEditPressed: function(oEvent) {
-			
+			var oViewModel = this.getModel("detailView");
+			var oListItem = oEvent.getSource().getParent().getParent();
+			var oBindingContext = oListItem.getBindingContext("contentModel");
+
+			oViewModel.setProperty("/editItem", oBindingContext.getProperty("Id"));
+			oViewModel.setProperty("/editName", oBindingContext.getProperty("Name"));
+		},
+
+		onEditValueChange: function(oEvent) {
+			var sNewValue = oEvent.getParameter("newValue");
+			if (sNewValue.length === 0 || sNewValue.includes("\"")) {
+				this.getModel("detailView").setProperty("/editValueState", "Error");
+			} else {
+				this.getModel("detailView").setProperty("/editValueState", "Success");
+			}
+		},
+
+		onAcceptPressed: function(oEvent) {
+			var oViewModel = this.getModel("detailView");
+			var sEditItemId = oViewModel.getProperty("/editItem");
+			var sNewName = oViewModel.getProperty("/editName");
+
+			if (sNewName.length === 0 || sNewName.includes("\"")) {
+				sap.m.MessageBox.show("Please input a valid name.");
+			} else {
+				$.ajax({
+					type: "GET",
+					url: this.getOwnerComponent().sRootPath + "?action=rename&id=" + sEditItemId + "&name=" + sNewName,
+					data: {}
+				}).always(function() {
+					this._reloadFolderContent();
+					this._reloadHierarchy();
+				}.bind(this));
+				
+				oViewModel.setProperty("/editItem", "-1");
+				oViewModel.setProperty("/editName", "");
+				oViewModel.setProperty("/editValueState", "Success");
+			}
+		},
+
+		onDeclinePressed: function(oEvent) {
+			var oViewModel = this.getModel("detailView");
+			oViewModel.setProperty("/editItem", "-1");
+			oViewModel.setProperty("/editName", "");
+			oViewModel.setProperty("/editValueState", "Success");
 		},
 
 		onCreateFolderPressed: function(oEvent) {
@@ -220,6 +264,12 @@ sap.ui.define([
 		 */
 		_onObjectMatched: function(oEvent) {
 			var sObjectId = oEvent.getParameter("arguments").objectId;
+			var oViewModel = this.getModel("detailView");
+			
+			oViewModel.setProperty("/editItem", "-1");
+			oViewModel.setProperty("/editName", "");
+			oViewModel.setProperty("/editValueState", "Success");
+			
 			this._loadFolder(sObjectId);
 
 			//				this.getModel().metadataLoaded().then( function() {

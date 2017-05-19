@@ -29,19 +29,30 @@
 					<Column minScreenWidth="Small" demandPopin="true">
 						<Text text="{i18n>detailFolderContentTableFilesizeColumn}"/>
 					</Column>
-					<Column hAlign="Right" width="10%"></Column>
+					<Column hAlign="Right" width="10%">
+						<Text text="{i18n>detailFolderContentTableActionsColumn}"/>
+					</Column>
 				</columns>
 				<items>
 					<ColumnListItem type="Active">
 						<cells>
 							<core:Icon src="sap-icon://{=${contentModel>Type}==='Folder' ? 'folder-blank' : 'document-text'}" decorative="true"/>
-							<ObjectIdentifier title="{contentModel>Name}" text="{ApplicationId}"/>
+							<HBox>
+								<ObjectIdentifier title="{contentModel>Name}" visible="{=${contentModel>Id}!==${detailView>/editItem}}"/>
+								<Input value="{detailView>/editName}" valueState="{detailView>/editValueState}" liveChange="onEditValueChange" visible="{=${contentModel>Id}===${detailView>/editItem}}"/>
+							</HBox>
 							<Text text="{contentModel>Type}"/>
 							<Text text="{path: 'contentModel>Last Modification', formatter: '.formatter.formatDate'}"/>
 							<Text text="{path: 'contentModel>Filesize', formatter: '.formatter.formatFilesize'}"/>
 							<HBox>
-								<Button class="transparentButton" icon="sap-icon://delete" press="onDeletePressed"/>
-								<Button class="transparentButton" icon="sap-icon://edit" press="onEditPressed"/>
+								<HBox visible="{=${contentModel>Id}!==${detailView>/editItem}}">
+									<Button class="transparentButton sapUiTinyMarginEnd" icon="sap-icon://delete" press="onDeletePressed"/>
+									<Button class="transparentButton" icon="sap-icon://edit" press="onEditPressed"/>
+								</HBox>
+								<HBox visible="{=${contentModel>Id}===${detailView>/editItem}}">
+									<Button type="Accept" icon="sap-icon://accept" press="onAcceptPressed" class="sapUiTinyMarginEnd"/>
+									<Button type="Reject" icon="sap-icon://decline" press="onDeclinePressed"/>
+								</HBox>
 							</HBox>
 						</cells>
 					</ColumnListItem>

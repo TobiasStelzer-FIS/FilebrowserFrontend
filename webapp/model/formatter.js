@@ -4,6 +4,14 @@ sap.ui.define([
 
 		return {
 
+			formatListItemClass: function (sListItemId) {
+				var sEditItemId = this.getModel("detailView").getProperty("editItem");
+				
+				if (sListItemId === sEditItemId) {
+					return "greenTableRow";
+				}
+			},
+
 			formatDate: function (iMillis) {
 				if (!iMillis) {
 					return "";

@@ -31,7 +31,9 @@ sap.ui.define([
 				lineItemListTitle: "",
 				newFolderName: "",
 				valueFileUploader: "",
-				Test: 2138199230
+				editItem: -1,
+				editName: "",
+				editValueState: "Success"
 			});
 		}
 	};
