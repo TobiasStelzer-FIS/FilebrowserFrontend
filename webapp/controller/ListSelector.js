@@ -114,10 +114,8 @@ sap.ui.define([
 					
 					if (currentId && currentId === sId) {
 						oList.setSelectedItem(oItem);
-						console.log("Out of " + aListItems.length + " items in the list 1 match was found");
 						return true;
 					}
-					console.log("Out of " + aListItems.length + " items in the list 0 matches were found");
 				});
 			},
 
