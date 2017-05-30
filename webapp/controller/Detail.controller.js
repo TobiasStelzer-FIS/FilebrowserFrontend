@@ -114,6 +114,8 @@ sap.ui.define([
 		 * @private
 		 */
 		onEditPressed: function(oEvent) {
+			this._openDialog("RenameDialog");
+			
 			var oViewModel = this.getModel("detailView");
 			var oListItem = oEvent.getSource().getParent().getParent();
 			var oBindingContext = oListItem.getBindingContext("contentModel");
